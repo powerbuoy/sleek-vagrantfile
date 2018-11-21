@@ -23,5 +23,5 @@ Vagrant.configure("2") do |config|
 	config.vm.provision "lamp", type: "shell", path: "https://raw.githubusercontent.com/powerbuoy/sleek-vagrantfile/master/lamp.sh"
 
 	# Setup WordPress, Themes and Database
-	config.vm.provision "wordpress", type: "shell", privileged: false, args: [File.basename(File.dirname(__FILE__))], path: "https://raw.githubusercontent.com/powerbuoy/sleek-vagrantfile/master/wordpress.sh"
+	config.vm.provision "wordpress", type: "shell", privileged: false, args: [File.basename(File.dirname(__FILE__)), "http://localhost:8080"], path: "https://raw.githubusercontent.com/powerbuoy/sleek-vagrantfile/master/wordpress.sh"
 end

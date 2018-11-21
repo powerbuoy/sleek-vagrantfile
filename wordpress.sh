@@ -2,7 +2,7 @@ THEMENAME=$1
 SITENAME="${THEMENAME^}"
 DBNAME="wp_$THEMENAME"
 DBPREFIX="wp_"
-SITEURL="http://localhost:8080" # http://10.11.12.13
+SITEURL=$2
 
 ###########
 # Setup GIT
