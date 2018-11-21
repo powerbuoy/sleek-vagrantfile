@@ -46,10 +46,11 @@ if ! [ -L /var/www/html ]; then
 	ln -fs /vagrant /var/www/html
 fi
 
-####################
-# Install curl & git
+##########################
+# Install curl & git & nfs
 apt-get install -y curl
 apt-get install -y git
+apt-get install -y nfs-common portmap
 
 ##############
 # Install node

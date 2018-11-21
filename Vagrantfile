@@ -5,8 +5,11 @@ Vagrant.configure("2") do |config|
 	# Ubuntu 18.04
 	config.vm.box = "ubuntu/bionic64"
 
-	# Access your site at localhost:8080
-	config.vm.network :forwarded_port, guest: 80, host: 8080
+	# Use NFS
+	config.vm.synced_folder ".", "/vagrant", type: "nfs"
+
+	# Setup network
+	config.vm.network "private_network", ip: "10.11.12.13"
 
 	# Save DB on destroy
 	config.trigger.before :destroy do |trigger|
@@ -20,8 +23,17 @@ Vagrant.configure("2") do |config|
 	end
 
 	# Install Apache, PHP, MySQL etc
-	config.vm.provision "lamp", type: "shell", path: "https://raw.githubusercontent.com/powerbuoy/sleek-vagrantfile/master/lamp.sh"
+	config.vm.provision "lamp",
+		type: "shell",
+		path: "https://raw.githubusercontent.com/powerbuoy/sleek-vagrantfile/master/lamp.sh"
 
 	# Setup WordPress, Themes and Database
-	config.vm.provision "wordpress", type: "shell", privileged: false, args: [File.basename(File.dirname(__FILE__)), "http://localhost:8080"], path: "https://raw.githubusercontent.com/powerbuoy/sleek-vagrantfile/master/wordpress.sh"
+	config.vm.provision "wordpress",
+		type: "shell",
+		privileged: false,
+		args: [
+			File.basename(File.dirname(__FILE__)),
+			"http://10.11.12.13" # NOTE: Same as under network setup
+		],
+		path: "https://raw.githubusercontent.com/powerbuoy/sleek-vagrantfile/master/wordpress.sh"
 end
