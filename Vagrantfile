@@ -29,12 +29,9 @@ Vagrant.configure("2") do |config|
 		# Don't remove this :P
 		apt-get update
 
-		################
-		# Install apache
+		######################
+		# Install Apache & PHP
 		apt-get install -y apache2
-
-		#############
-		# Install PHP
 		apt-get install -y php
 
 		###############
@@ -51,7 +48,9 @@ Vagrant.configure("2") do |config|
 		# Enable mod rewrite
 		a2enmod rewrite
 
-		################
+		# We need AllowOverride all too...
+		sed -i -e 's/<\/VirtualHost>/<Directory \/var\/www\/html>AllowOverride all<\/Directory><\/Virtualhost>/g' /etc/apache2/sites-available/000-default.conf
+
 		# Restart apache
 		systemctl restart apache2
 
@@ -62,9 +61,10 @@ Vagrant.configure("2") do |config|
 			ln -fs /vagrant /var/www/html
 		fi
 
-		##############
-		# Install curl
+		####################
+		# Install curl & git
 		apt-get install -y curl
+		apt-get install -y git
 
 		##############
 		# Install node
@@ -74,10 +74,6 @@ Vagrant.configure("2") do |config|
 		##############
 		# Install gulp
 		npm install --global gulp-cli
-
-		#############
-		# Install git
-		apt-get install git
 
 		#######################
 		# Install WordPress CLI
