@@ -136,11 +136,6 @@ if ! [ -f /vagrant/.htaccess ]; then
 <IfModule mod_rewrite.c>
 	RewriteEngine On
 	RewriteBase /
-
-	# Route wp-content to live site
-	# RewriteCond %{REQUEST_URI} ^/wp-content/uploads/[^\/]*/.*\$
-	# RewriteRule ^(.*)\$ https://www.live-site-with-uploads.com/\$1 [QSA,L]
-
 	RewriteRule ^index.php\$ - [L]
 	RewriteCond %{REQUEST_FILENAME} !-f
 	RewriteCond %{REQUEST_FILENAME} !-d
@@ -196,6 +191,23 @@ if [ -f /vagrant/db.sql ]; then
 
 		wp search-replace $CURRSITEURL $SITEURL --path=/vagrant/
 	fi
+
+	# Route wp-content to live site
+	cat > /vagrant/.htaccess << EOL
+<IfModule mod_rewrite.c>
+	RewriteEngine On
+	RewriteBase /
+
+	# Route wp-content to live site
+	RewriteCond %{REQUEST_URI} ^/wp-content/uploads/[^\/]*/.*\$
+	RewriteRule ^(.*)\$ $CURRSITEURL/\$1 [QSA,L]
+
+	RewriteRule ^index.php\$ - [L]
+	RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteCond %{REQUEST_FILENAME} !-d
+	RewriteRule . /index.php [L]
+</IfModule>
+EOL
 # No dump, fresh install
 else
 	echo "Doing fresh install"
