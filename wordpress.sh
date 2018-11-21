@@ -2,6 +2,7 @@ THEMENAME=$1
 SITENAME="${THEMENAME^}"
 DBNAME="wp_$THEMENAME"
 DBPREFIX="wp_"
+SITEURL="http://localhost:8080" # http://10.11.12.13
 
 ###########
 # Setup GIT
@@ -188,18 +189,18 @@ if [ -f /vagrant/db.sql ]; then
 
 	# Rewrite site_url if needed
 	# TODO: Should rewrite https://www.siteurl.com, https://siteurl.com, http://www.siteurl.com and http://siteurl.com just to be sure
-	SITEURL=$(mysql $DBNAME -uroot -proot -sse "SELECT option_value FROM ${DBPREFIX}options WHERE option_name = 'siteurl'")
+	CURRSITEURL=$(mysql $DBNAME -uroot -proot -sse "SELECT option_value FROM ${DBPREFIX}options WHERE option_name = 'siteurl'")
 
-	if ! [ $SITEURL = "http://localhost:8080" ]; then
-		echo "\nRewriting siteurl from $SITEURL to http://localhost:8080"
+	if ! [ $CURRSITEURL = $SITEURL ]; then
+		echo "Rewriting siteurl from $CURRSITEURL to $SITEURL"
 
-		wp search-replace "$SITEURL" "http://localhost:8080" --path=/vagrant/
+		wp search-replace $CURRSITEURL $SITEURL --path=/vagrant/
 	fi
 # No dump, fresh install
 else
 	echo "Doing fresh install"
 
-	wp core install --url=http://localhost:8080 --title=$SITENAME --admin_user=inviseadmin --admin_password=password --admin_email=me@mydomain.com --skip-email --path=/vagrant/
+	wp core install --url=$SITEURL --title=$SITENAME --admin_user=inviseadmin --admin_password=password --admin_email=me@mydomain.com --skip-email --path=/vagrant/
 fi
 
 ############
@@ -274,4 +275,4 @@ if [ -f /vagrant/wp-content/themes/$THEMENAME/package.json ] && [ ! -d /vagrant/
 	gulp
 fi
 
-echo "All done! Visit your site at: http://localhost:8080"
+echo "All done! Visit your site at: $SITEURL"
