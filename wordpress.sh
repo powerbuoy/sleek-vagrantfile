@@ -6,7 +6,7 @@ DBPREFIX="wp_"
 ###########
 # Setup GIT
 if ! [ -d /vagrant/.git ]; then
-	echo "\nInitializing GIT"
+	echo "Initializing GIT"
 
 	cd /vagrant/
 	git init
@@ -15,7 +15,7 @@ fi
 ###########
 # Gitignore
 if ! [ -f /vagrant/.gitignore ]; then
-	echo "\nCreating .gitignore"
+	echo "Creating .gitignore"
 
 	cat > /vagrant/.gitignore << EOL
 # Our ignores
@@ -129,7 +129,7 @@ fi
 ##########
 # Htaccess
 if ! [ -f /vagrant/.htaccess ]; then
-	echo "\nCreating .htaccess"
+	echo "Creating .htaccess"
 
 	cat > /vagrant/.htaccess << EOL
 <IfModule mod_rewrite.c>
@@ -151,15 +151,13 @@ fi
 ###########
 # WordPress
 if ! [ -d /vagrant/wp-admin/ ]; then
-	echo "\nDownloading WordPress"
-
 	wp core download --skip-content --path=/vagrant/ --locale=sv_SE
 fi
 
 ###########
 # WP Config
 if ! [ -f /vagrant/wp-config.php ]; then
-	echo "\nCreating wp-config.php"
+	echo "Creating wp-config.php"
 
 	wp config create --dbname=$DBNAME --dbprefix=$DBPREFIX --dbuser=root --dbpass=root --dbhost=localhost --quiet --path=/vagrant/
 fi
@@ -170,7 +168,7 @@ mysql -uroot -proot -e "CREATE DATABASE IF NOT EXISTS ${DBNAME}"
 
 # We have an existing DB dump
 if [ -f /vagrant/db.sql ]; then
-	echo "\nImporting existing database"
+	echo "Importing existing database"
 
 	# Make sure not duplicate DB
 	mysql -uroot -proot -e "DROP DATABASE ${DBNAME}"
@@ -183,7 +181,7 @@ if [ -f /vagrant/db.sql ]; then
 	DBPREFIX=$(mysql $DBNAME -uroot -proot -sse "SELECT DISTINCT SUBSTRING(TABLE_NAME FROM 1 FOR (LENGTH(TABLE_NAME) - 8)) FROM information_schema.TABLES WHERE TABLE_NAME LIKE '%postmeta'")
 
 	if ! [ $DBPREFIX = "wp_" ]; then
-		echo "\nChanging DB prefix to $DBPREFIX"
+		echo "Changing DB prefix to $DBPREFIX"
 
 		wp config set table_prefix $DBPREFIX --path=/vagrant/
 	fi
@@ -199,7 +197,7 @@ if [ -f /vagrant/db.sql ]; then
 	fi
 # No dump, fresh install
 else
-	echo "\nDoing fresh install"
+	echo "Doing fresh install"
 
 	wp core install --url=http://localhost:8080 --title=$SITENAME --admin_user=inviseadmin --admin_password=password --admin_email=me@mydomain.com --skip-email --path=/vagrant/
 fi
@@ -207,21 +205,21 @@ fi
 ############
 # WP Content
 if ! [ -d /vagrant/wp-content/ ]; then
-	echo "\nCreating wp-content/"
+	echo "Creating wp-content/"
 
 	mkdir /vagrant/wp-content/
 fi
 
 # Plugins
 if ! [ -d /vagrant/wp-content/plugins/ ]; then
-	echo "\nCreating wp-content/plugins/"
+	echo "Creating wp-content/plugins/"
 
 	mkdir /vagrant/wp-content/plugins/
 fi
 
 # Uploads
 if ! [ -d /vagrant/wp-content/uploads/ ]; then
-	echo "\nCreating wp-content/uploads/"
+	echo "Creating wp-content/uploads/"
 
 	mkdir /vagrant/wp-content/uploads/
 fi
@@ -230,19 +228,19 @@ chmod 777 /vagrant/wp-content/uploads/
 
 # Themes
 if ! [ -d /vagrant/wp-content/themes/ ]; then
-	echo "\nCreating wp-content/themes/"
+	echo "Creating wp-content/themes/"
 
 	mkdir /vagrant/wp-content/themes
 
 	# Install Sleek
-	echo "\nInstalling Sleek"
+	echo "Installing Sleek"
 
 	cd /vagrant/
 
 	git submodule add https://github.com/powerbuoy/sleek wp-content/themes/sleek
 
 	# Install SleekChild
-	echo "\nInstalling SleekChild"
+	echo "Installing SleekChild"
 
 	wp theme install https://github.com/powerbuoy/sleek-child/archive/master.zip --path=/vagrant/
 
@@ -258,7 +256,7 @@ if ! [ -d /vagrant/wp-content/themes/ ]; then
 	wp theme activate $THEMENAME --path=/vagrant/
 
 	# NPM install & gulp
-	echo "\nRunning NPM install and Gulp on ${THEMENAME} (this may take a while...)"
+	echo "Running NPM install and Gulp on ${THEMENAME} (this may take a while...)"
 
 	cd /vagrant/wp-content/themes/$THEMENAME
 
@@ -276,4 +274,4 @@ if [ -f /vagrant/wp-content/themes/$THEMENAME/package.json ] && [ ! -d /vagrant/
 	gulp
 fi
 
-echo "\nAll done! Visit your site at: http://localhost:8080"
+echo "All done! Visit your site at: http://localhost:8080"
