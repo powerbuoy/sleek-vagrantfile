@@ -49,7 +49,7 @@ Vagrant.configure("2") do |config|
 		a2enmod rewrite
 
 		# We need AllowOverride all too...
-		sed -i -e 's/<\/VirtualHost>/<Directory \/var\/www\/html>AllowOverride all<\/Directory><\/Virtualhost>/g' /etc/apache2/sites-available/000-default.conf
+		printf "<VirtualHost *:80>\n\tServerAdmin webmaster@localhost\n\tDocumentRoot /var/www/html\n\n\t<Directory /var/www/html>\n\t\tAllowOverride all\n\t</Directory>\n\n\tErrorLog \${APACHE_LOG_DIR}/error.log\n\tCustomLog \${APACHE_LOG_DIR}/access.log combined\n</Virtualhost>" > /etc/apache2/sites-available/000-default.conf
 
 		# Restart apache
 		systemctl restart apache2
@@ -112,7 +112,7 @@ Vagrant.configure("2") do |config|
 		if ! [ -f /vagrant/.htaccess ]; then
 			echo "\nCreating .htaccess"
 
-			printf "# BEGIN WordPress\n<IfModule mod_rewrite.c>\nRewriteEngine On\nRewriteBase /\nRewriteRule ^index\.php$ - [L]\nRewriteCond %%{REQUEST_FILENAME} !-f\nRewriteCond %%{REQUEST_FILENAME} !-d\nRewriteRule . /index.php [L]\n</IfModule>\n# END WordPress" > /vagrant/.htaccess;
+			printf "<IfModule mod_rewrite.c>\nRewriteEngine On\nRewriteBase /\n\n# Route wp-content to live site\n# RewriteCond %{REQUEST_URI} ^/wp-content/uploads/[^\/]*/.*$\n# RewriteRule ^(.*)$ https://www.live-site-with-uploads.com/$1 [QSA,L]\n\nRewriteRule ^index.php$ - [L]\nRewriteCond %{REQUEST_FILENAME} !-f\nRewriteCond %{REQUEST_FILENAME} !-d\nRewriteRule . /index.php [L]\n</IfModule>\n" > /vagrant/.htaccess;
 		fi
 
 		###########
@@ -226,6 +226,16 @@ Vagrant.configure("2") do |config|
 
 			# NPM install & gulp
 			echo "\nRunning NPM install and Gulp on ${THEMENAME} (this may take a while...)"
+
+			cd /vagrant/wp-content/themes/$THEMENAME
+
+			npm install
+			gulp
+		fi
+
+		# Run NPM install and Gulp on existing themes with package.json and no node_modules
+		if [ -f /vagrant/wp-content/themes/$THEMENAME/package.json ] && [ ! -d /vagrant/wp-content/themes/$THEMENAME/node_modules ]; then
+			echo "Running NPM install and Gulp on ${THEMENAME} (this may take a while...)"
 
 			cd /vagrant/wp-content/themes/$THEMENAME
 
