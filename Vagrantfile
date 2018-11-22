@@ -5,6 +5,11 @@ Vagrant.configure("2") do |config|
 	# Ubuntu 18.04
 	config.vm.box = "ubuntu/bionic64"
 
+	# More RAM please
+	config.vm.provider "virtualbox" do |v|
+		v.memory = 2048
+	end
+
 	# Use NFS
 	config.vm.synced_folder ".", "/vagrant", type: "nfs", mount_options: ["actimeo=2"] # https://www.jverdeyen.be/vagrant/speedup-vagrant-nfs/
 
