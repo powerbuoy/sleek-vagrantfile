@@ -156,6 +156,7 @@ if ! [ -f /vagrant/wp-config.php ]; then
 	echo "Creating wp-config.php"
 
 	wp config create --dbname=$DBNAME --dbprefix=$DBPREFIX --dbuser=root --dbpass=root --dbhost=localhost --quiet --path=/vagrant/
+	wp config set WP_DEBUG true --raw --type=constant --path=/vagrant/
 fi
 
 #################
@@ -190,10 +191,9 @@ if [ -f /vagrant/db.sql ]; then
 		echo "Rewriting siteurl from $CURRSITEURL to $SITEURL"
 
 		wp search-replace $CURRSITEURL $SITEURL --path=/vagrant/
-	fi
 
-	# Route wp-content to live site
-	cat > /vagrant/.htaccess << EOL
+		# Route wp-content to live site
+		cat > /vagrant/.htaccess << EOL
 <IfModule mod_rewrite.c>
 	RewriteEngine On
 	RewriteBase /
@@ -208,6 +208,7 @@ if [ -f /vagrant/db.sql ]; then
 	RewriteRule . /index.php [L]
 </IfModule>
 EOL
+	fi
 # No dump, fresh install
 else
 	echo "Doing fresh install"
