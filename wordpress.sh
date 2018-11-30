@@ -148,6 +148,7 @@ fi
 # WordPress
 if ! [ -d /vagrant/wp-admin/ ]; then
 	wp core download --skip-content --path=/vagrant/ --locale=sv_SE
+	wp language core install sv_SE --path=/vagrant/
 fi
 
 ###########
@@ -213,7 +214,7 @@ EOL
 else
 	echo "Doing fresh install"
 
-	wp core install --url=$SITEURL --title=$SITENAME --admin_user=inviseadmin --admin_password=password --admin_email=me@mydomain.com --skip-email --path=/vagrant/
+	wp core install --url=$SITEURL --title=$SITENAME --admin_user=siteadmin --admin_password=password --admin_email=me@mydomain.com --skip-email --path=/vagrant/
 fi
 
 ############
