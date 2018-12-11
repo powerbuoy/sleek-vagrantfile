@@ -133,6 +133,9 @@ if ! [ -f /vagrant/.htaccess ]; then
 	echo "Creating .htaccess"
 
 	cat > /vagrant/.htaccess << EOL
+php_value upload_max_filesize 64M
+php_value post_max_size 64M
+
 <IfModule mod_rewrite.c>
 	RewriteEngine On
 	RewriteBase /
@@ -146,9 +149,10 @@ fi
 
 ###########
 # WordPress
+# NOTE: I think maybe this too creates (or adds to) .htaccess...
 if ! [ -d /vagrant/wp-admin/ ]; then
 	wp core download --skip-content --path=/vagrant/ --locale=sv_SE
-	wp language core install sv_SE --path=/vagrant/
+	wp language core install sv_SE --path=/vagrant/ # NOTE: I don't see why both --locale above and this is needed
 fi
 
 ###########
@@ -195,6 +199,9 @@ if [ -f /vagrant/db.sql ]; then
 
 		# Route wp-content to live site
 		cat > /vagrant/.htaccess << EOL
+php_value upload_max_filesize 64M
+php_value post_max_size 64M
+
 <IfModule mod_rewrite.c>
 	RewriteEngine On
 	RewriteBase /
