@@ -297,9 +297,9 @@ if ! [ -d /vagrant/wp-content/themes/ ]; then
 	mv /vagrant/wp-content/themes/sleek-child/ /vagrant/wp-content/themes/$THEMENAME
 
 	# Search/replace textdomains
-	sed -i -e "s/SleekChild/${SITENAME}/g" /vagrant/wp-content/themes/$THEMENAME/style.css
-	sed -i -e "s/sleek_child/${THEMENAME}/g" /vagrant/wp-content/themes/$THEMENAME/style.css
-	sed -i -e "s/sleek_child/${THEMENAME}/g" /vagrant/wp-content/themes/$THEMENAME/functions.php
+	sed -i "s/SleekChild/${SITENAME}/g" /vagrant/wp-content/themes/$THEMENAME/style.css
+	sed -i "s/sleek_child/${THEMENAME}/g" /vagrant/wp-content/themes/$THEMENAME/style.css
+	sed -i "s/sleek_child/${THEMENAME}/g" /vagrant/wp-content/themes/$THEMENAME/functions.php
 
 	# Activate theme
 	wp theme activate $THEMENAME --path=/vagrant/
@@ -314,7 +314,7 @@ if ! [ -d /vagrant/wp-content/themes/ ]; then
 
 	# Create sleek-css config
 	cat /vagrant/wp-content/themes/$THEMENAME/node_modules/sleek-css/config/*.scss > /vagrant/wp-content/themes/$THEMENAME/src/sass/config.scss
-	sed 's/ !default//g' /vagrant/wp-content/themes/$THEMENAME/src/sass/config.scss
+	sed -i 's/ !default//g' /vagrant/wp-content/themes/$THEMENAME/src/sass/config.scss
 fi
 
 # Run NPM install on sleek with package.json and no node_modules
