@@ -25,6 +25,11 @@ if ! [ -f /vagrant/.gitignore ]; then
 ubuntu-bionic-18.04-cloudimg-console.log
 db.sql
 
+# Ignore non essential plugins
+wp-content/plugins/*
+!wp-content/plugins/advanced-custom-fields-pro
+!wp-content/plugins/sitepress-multilingual-cms
+
 # Ignore WP core
 *~
 .DS_Store
@@ -151,8 +156,7 @@ fi
 # WordPress
 # NOTE: I think maybe this too creates (or adds to) .htaccess...
 if ! [ -d /vagrant/wp-admin/ ]; then
-	wp core download --skip-content --path=/vagrant/ --locale=sv_SE
-	wp language core install sv_SE --path=/vagrant/ # NOTE: I don't see why both --locale above and this is needed
+	wp core download --skip-content --path=/vagrant/
 fi
 
 ###########
@@ -284,6 +288,10 @@ if ! [ -d /vagrant/wp-content/themes/ ]; then
 
 	npm install
 	gulp
+
+	# Create sleek-css config
+	cat /vagrant/wp-content/themes/$THEMENAME/node_modules/sleek-css/config/*.scss > /vagrant/wp-content/themes/$THEMENAME/src/sass/config.scss
+	sed 's/ !default//g' /vagrant/wp-content/themes/$THEMENAME/src/sass/config.scss
 fi
 
 # Run NPM install on sleek with package.json and no node_modules
