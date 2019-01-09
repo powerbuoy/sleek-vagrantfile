@@ -157,6 +157,10 @@ fi
 # NOTE: I think maybe this too creates (or adds to) .htaccess...
 if ! [ -d /vagrant/wp-admin/ ]; then
 	wp core download --skip-content --path=/vagrant/
+
+	# Install sv_SE
+	wp language core install sv_SE --path=/vagrant/
+	wp language core activate sv_SE --path=/vagrant/
 fi
 
 ###########
@@ -226,6 +230,25 @@ else
 	echo "Doing fresh install"
 
 	wp core install --url=$SITEURL --title=$SITENAME --admin_user=siteadmin --admin_password=password --admin_email=me@mydomain.com --skip-email --path=/vagrant/
+
+	# Create start and blog page
+	wp post update 2 --post_title=Start --post_name=start --post_content="Välkommen!" --path=/vagrant/
+	BLOGID=$(wp post create --post_type=page --post_status=publish --post_author=1 --post_name=blogg --post_title=Blogg --post_content="Välkommen till bloggen!" --porcelain --path=/vagrant/)
+
+	# Use static front page
+	wp option update show_on_front 'page' --path=/vagrant/
+	wp option update page_on_front 2 --path=/vagrant/ # NOTE: Risky to hard-code 2?? It's the default "Sample page" created by a fresh install...
+	wp option update page_for_posts $BLOGID --path=/vagrant/
+
+	# Update permalink structure
+	wp option update permalink_structure "/blogg/%postname%/" --path=/vagrant/
+
+	# Disable comments
+	wp option update default_comment_status closed --path=/vagrant/
+
+	# Time/date formats
+	wp option update date_format "j F, Y" --path=/vagrant/
+	wp option update time_format "H:i" --path=/vagrant/
 fi
 
 ############
