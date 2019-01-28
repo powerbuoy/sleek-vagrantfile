@@ -318,22 +318,22 @@ if ! [ -d /vagrant/wp-content/themes/ ]; then
 fi
 
 # Run NPM install on sleek with package.json and no node_modules
-if [ -f /vagrant/wp-content/themes/sleek/package.json ] && [ ! -d /vagrant/wp-content/themes/sleek/node_modules ]; then
-	echo "Running NPM install on Sleek (this may take a while...)"
-
-	cd /vagrant/wp-content/themes/sleek
-
-	npm install
-fi
+# if [ -f /vagrant/wp-content/themes/sleek/package.json ] && [ ! -d /vagrant/wp-content/themes/sleek/node_modules ]; then
+# 	echo "Running NPM install on Sleek (this may take a while...)"
+#
+# 	cd /vagrant/wp-content/themes/sleek
+#
+# 	npm install
+# fi
 
 # Run NPM install and Gulp on existing themes with package.json and no node_modules
-if [ -f /vagrant/wp-content/themes/$THEMENAME/package.json ] && [ ! -d /vagrant/wp-content/themes/$THEMENAME/node_modules ]; then
-	echo "Running NPM install and Gulp on ${THEMENAME} (this may take a while...)"
-
-	cd /vagrant/wp-content/themes/$THEMENAME
-
-	npm install
-	gulp
-fi
+# if [ -f /vagrant/wp-content/themes/$THEMENAME/package.json ] && [ ! -d /vagrant/wp-content/themes/$THEMENAME/node_modules ]; then
+# 	echo "Running NPM install and Gulp on ${THEMENAME} (this may take a while...)"
+#
+# 	cd /vagrant/wp-content/themes/$THEMENAME
+#
+# 	npm install
+# 	gulp
+# fi
 
 echo "All done! Visit your site at: $SITEURL"
