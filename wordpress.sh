@@ -154,13 +154,13 @@ fi
 
 ###########
 # WordPress
-# NOTE: I think maybe this too creates (or adds to) .htaccess...
+# NOTE: I think maybe this too creates (or adds to) .htaccess...??
 if ! [ -d /vagrant/wp-admin/ ]; then
 	wp core download --skip-content --path=/vagrant/
 
 	# Install sv_SE
-	wp language core install sv_SE --path=/vagrant/
-	wp language core activate sv_SE --path=/vagrant/
+	# wp language core install sv_SE --path=/vagrant/
+	# wp language core activate sv_SE --path=/vagrant/
 fi
 
 ###########

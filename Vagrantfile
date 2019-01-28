@@ -11,7 +11,7 @@ Vagrant.configure("2") do |config|
 	end
 
 	# Use NFS
-	config.vm.synced_folder ".", "/vagrant", type: "nfs", mount_options: ["actimeo=2"] # https://www.jverdeyen.be/vagrant/speedup-vagrant-nfs/
+	# config.vm.synced_folder ".", "/vagrant", type: "nfs", mount_options: ["actimeo=2"] # https://www.jverdeyen.be/vagrant/speedup-vagrant-nfs/
 
 	# Setup network
 	config.vm.network "private_network", ip: "10.11.12.13"
