@@ -303,18 +303,6 @@ if ! [ -d /vagrant/wp-content/themes/ ]; then
 
 	# Activate theme
 	wp theme activate $THEMENAME --path=/vagrant/
-
-	# NPM install & gulp
-	echo "Running NPM install and Gulp on ${THEMENAME} (this may take a while...)"
-
-	cd /vagrant/wp-content/themes/$THEMENAME
-
-	npm install
-	gulp
-
-	# Create sleek-css config
-	cat /vagrant/wp-content/themes/$THEMENAME/node_modules/sleek-css/config/*.scss > /vagrant/wp-content/themes/$THEMENAME/src/sass/config.scss
-	sed -i 's/ !default//g' /vagrant/wp-content/themes/$THEMENAME/src/sass/config.scss
 fi
 
 # Run NPM install on sleek with package.json and no node_modules
@@ -334,6 +322,10 @@ fi
 #
 # 	npm install
 # 	gulp
+#
+# 	# Create sleek-css config
+# 	cat /vagrant/wp-content/themes/$THEMENAME/node_modules/sleek-css/config/*.scss > /vagrant/wp-content/themes/$THEMENAME/src/sass/config.scss
+# 	sed -i 's/ !default//g' /vagrant/wp-content/themes/$THEMENAME/src/sass/config.scss
 # fi
 
 echo "All done! Visit your site at: $SITEURL"
