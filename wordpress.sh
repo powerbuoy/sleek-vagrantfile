@@ -23,7 +23,7 @@ if ! [ -f /vagrant/.gitignore ]; then
 .htaccess
 .vagrant
 ubuntu-bionic-18.04-cloudimg-console.log
-db.sql
+*.sql
 
 # Ignore non essential plugins
 wp-content/plugins/*
@@ -160,7 +160,7 @@ if ! [ -d /vagrant/wp-admin/ ]; then
 
 	# Install sv_SE
 	# wp language core install sv_SE --path=/vagrant/
-	# wp language core activate sv_SE --path=/vagrant/
+	# wp site switch-language sv_SE --path=/vagrant/
 fi
 
 ###########
