@@ -23,7 +23,7 @@ apt-get -y install mysql-server
 # Install PHP modules
 echo "Installing PHP Modules"
 
-apt-get install -y php-pear php-fpm php-dev php-zip php-curl php-xmlrpc php-gd php-mysql php-mbstring php-xml libapache2-mod-php
+# apt-get install -y php-pear php-fpm php-dev php-zip php-curl php-xmlrpc php-gd php-mysql php-mbstring php-xml libapache2-mod-php
 
 ####################
 # Enable mod rewrite
