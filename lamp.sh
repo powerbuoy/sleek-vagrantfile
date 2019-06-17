@@ -1,3 +1,7 @@
+#################
+# Prevent prompts
+export DEBIAN_FRONTEND=noninteractive
+
 ######################
 # Don't remove this :P
 apt-get update
