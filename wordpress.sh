@@ -25,10 +25,9 @@ if ! [ -f /vagrant/.gitignore ]; then
 ubuntu-bionic-18.04-cloudimg-console.log
 *.sql
 
-# Ignore non essential plugins
-wp-content/plugins/*
-!wp-content/plugins/advanced-custom-fields-pro
-!wp-content/plugins/sitepress-multilingual-cms
+# Ignore plugins and lang
+wp-content/plugins/
+wp-content/languages/
 
 # Ignore WP core
 *~
